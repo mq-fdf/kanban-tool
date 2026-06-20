@@ -444,16 +444,11 @@ const onTaskTouchMove = (e) => {
 };
 
 const onTaskTouchEnd = () => {
-  // 如果有拖拽任务且真的发生了移动且拖到了有效区域，执行移动
+  // 触摸事件只负责拖拽逻辑，点击完全交给 @click 处理
   if (touchDraggedTask && hasTouchMoved && isDragOverColumnId.value) {
     if (touchDraggedTask.status !== isDragOverColumnId.value) {
       store.moveTask(touchDraggedTask.id, isDragOverColumnId.value);
     }
-  } 
-  // 如果有拖拽任务但完全没移动，说明是想点击查看详情
-  else if (touchDraggedTask && !hasTouchMoved) {
-    touchClickFlag = true; // 标记这次点击已经在触摸事件里处理了
-    viewTask(touchDraggedTask);
   }
   
   touchDraggedTask = null;
@@ -462,12 +457,6 @@ const onTaskTouchEnd = () => {
 };
 
 const viewTask = (task) => {
-  // 如果是刚触摸，或者是在移动端检测到，这里就直接跳过，防止重复触发
-  if (touchClickFlag) {
-    touchClickFlag = false;
-    return;
-  }
-  
   // 如果在全屏模式，先退出全屏，否则弹窗会被盖住
   if (document.fullscreenElement) {
     document.exitFullscreen();
