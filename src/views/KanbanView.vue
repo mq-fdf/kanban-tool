@@ -337,6 +337,7 @@ let draggedTask = null;
 let dragColumn = null;
 let dragOffset = { x: 0, y: 0 };
 let isDraggingColumn = false;
+let touchClickFlag = false; // 标记：在触摸事件中已经处理过点击，防止后续@click重复触发
 
 const totalTasks = computed(() => {
   return columns.value.reduce((sum, col) => sum + col.tasks.length, 0);
@@ -451,6 +452,7 @@ const onTaskTouchEnd = () => {
   } 
   // 如果有拖拽任务但完全没移动，说明是想点击查看详情
   else if (touchDraggedTask && !hasTouchMoved) {
+    touchClickFlag = true; // 标记这次点击已经在触摸事件里处理了
     viewTask(touchDraggedTask);
   }
   
@@ -460,6 +462,12 @@ const onTaskTouchEnd = () => {
 };
 
 const viewTask = (task) => {
+  // 如果是刚触摸，或者是在移动端检测到，这里就直接跳过，防止重复触发
+  if (touchClickFlag) {
+    touchClickFlag = false;
+    return;
+  }
+  
   // 如果在全屏模式，先退出全屏，否则弹窗会被盖住
   if (document.fullscreenElement) {
     document.exitFullscreen();
