@@ -10,6 +10,6 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-  // 把下面的注释取消，并把 'kanban-tool' 换成你的仓库名
+  // 部署到 GitHub Pages 时，需要设置 base 为 '/kanban-tool/'
   base: '/kanban-tool/',
 })
