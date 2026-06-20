@@ -443,15 +443,15 @@ const onTaskTouchMove = (e) => {
 };
 
 const onTaskTouchEnd = () => {
-  if (!touchDraggedTask || !hasTouchMoved || !isDragOverColumnId.value) {
-    touchDraggedTask = null;
-    isDragOverColumnId.value = null;
-    hasTouchMoved = false;
-    return;
-  }
-
-  if (touchDraggedTask.status !== isDragOverColumnId.value) {
-    store.moveTask(touchDraggedTask.id, isDragOverColumnId.value);
+  // 如果有拖拽任务且真的发生了移动且拖到了有效区域，执行移动
+  if (touchDraggedTask && hasTouchMoved && isDragOverColumnId.value) {
+    if (touchDraggedTask.status !== isDragOverColumnId.value) {
+      store.moveTask(touchDraggedTask.id, isDragOverColumnId.value);
+    }
+  } 
+  // 如果有拖拽任务但完全没移动，说明是想点击查看详情
+  else if (touchDraggedTask && !hasTouchMoved) {
+    viewTask(touchDraggedTask);
   }
   
   touchDraggedTask = null;
