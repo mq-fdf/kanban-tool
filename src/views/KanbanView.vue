@@ -460,6 +460,10 @@ const onTaskTouchEnd = () => {
 };
 
 const viewTask = (task) => {
+  // 如果在全屏模式，先退出全屏，否则弹窗会被盖住
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  }
   currentTask.value = task;
   viewDialogVisible.value = true;
 };
